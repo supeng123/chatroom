@@ -8,8 +8,8 @@ const errorMsg = (msg) => ({type: ERROR_MSG, data: msg})
 const receiveUser = (user) => ({type: RECEIVE_USER, data: user})
 export const resetUser = (msg) => ({type: RESET_USER, data: msg})
 export const receiveUserList = (userList) => ({type: RECEIVE_USER_LIST, data:userList})
-export const receiveMsgList = ({users, chatMsgs}) => ({type: RECEIVE_MSG_LIST, data:{users, chatMsgs}})
-export const receiveMsg = (chatMsg) => ({type: RECEIVE_MSG, data:chatMsg})
+export const receiveMsgList = ({users, chatMsgs, userid}) => ({type: RECEIVE_MSG_LIST, data:{users, chatMsgs, userid}})
+export const receiveMsg = ({chatMsg, userid}) => ({type: RECEIVE_MSG, data:{chatMsg, userid}})
 
 
 
@@ -103,7 +103,7 @@ export function initIO(dispatch, userid) {
             console.log('msg from serve',chatMsg)
 
             if(userid === chatMsg.from || userid === chatMsg.to) {
-                dispatch(receiveMsg(chatMsg))
+                dispatch(receiveMsg({chatMsg, userid}))
             }
         })
     }
@@ -116,7 +116,7 @@ async function getMsgList(dispatch, userId) {
 
     if(result.code === 0) {
         const {users, chatMsgs} = result.data
-        dispatch(receiveMsgList({users, chatMsgs}))
+        dispatch(receiveMsgList({users, chatMsgs, userId}))
     }
 }
 

@@ -70,7 +70,7 @@ class Main extends Component {
             return <Redirect to='/login'></Redirect>
         }
 
-        const {user, location} = this.props;
+        const {user, location, unReadCount} = this.props;
         if(!user._id){
             return null;
         } else  {
@@ -113,13 +113,13 @@ class Main extends Component {
                     <Route path='/chat/:userid' component={Chat}/>
                     <Route component={NotFound}/>
                 </Switch>
-                {currentNav ? <NavFooter navList={this.navList}></NavFooter>: null} 
+                {currentNav ? <NavFooter navList={this.navList} unReadCount={unReadCount}></NavFooter>: null} 
             </div>
         )
     }
 }
 
 export default connect(
-    state => ({user:state.user}),
+    state => ({user:state.user, unReadCount: state.chat.unReadCount}),
     {getUser}
 )(Main)
