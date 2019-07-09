@@ -3,7 +3,7 @@ import { statement } from "@babel/template";
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {NavBar, List, InputItem, Grid, Icon} from 'antd-mobile';
-import {sendMsg} from '../../redux/actions.js';
+import {sendMsg, readMsg} from '../../redux/actions.js';
 
 const Item = List.Item;
 
@@ -46,10 +46,22 @@ class Chat extends Component{
 
     componentDidMount() {
         window.scrollTo(0, document.body.scrollHeight)
+
+        //update already read msg
+        const targetId = this.props.match.params.userid;
+        const to = this.props.user._id;
+        this.props.readMsg(targetId, to)
     }
 
     componentDidUpdate() {
         window.scrollTo(0, document.body.scrollHeight)
+    }
+
+    componentWillUnmount() {
+        //update already read msg
+        const targetId = this.props.match.params.userid;
+        const to = this.props.user._id;
+        this.props.readMsg(targetId, to)
     }
 
     render() {
@@ -126,5 +138,5 @@ class Chat extends Component{
 
 export default connect(
     state => ({user: state.user, chat: state.chat}),
-    {sendMsg}
+    {sendMsg, readMsg}
 )(Chat)
